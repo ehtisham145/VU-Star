@@ -1,0 +1,244 @@
+# Django Learning Notes
+
+## Day 1
+
+### Python-Decouple
+
+`python-decouple` is a Python library used to load environment variables from a `.env` file. It is mainly used to keep sensitive information, such as API keys, database credentials, and secret keys, outside of the source code.
+
+### Why use Python-Decouple?
+
+Compared to the `python-dotenv` package, `python-decouple` provides better support for data type conversion.
+
+For example, values stored in a `.env` file are always read as strings. With `python-decouple`, you can automatically convert them into the correct data type using the `cast` parameter.
+
+Example:
+
+```python
+from decouple import config
+
+DEBUG = config("DEBUG", cast=bool)
+PORT = config("PORT", cast=int)
+SECRET_KEY = config("SECRET_KEY")
+```
+
+Here:
+
+* `DEBUG` becomes a Boolean (`True` or `False`).
+* `PORT` becomes an Integer.
+* `SECRET_KEY` remains a String.
+
+### When should you use it?
+
+* **Small projects (AI/ML projects):**
+
+  * Usually only an API key is stored.
+  * `python-dotenv` is often sufficient.
+
+* **Web frameworks (Django, Flask, FastAPI):**
+
+  * Multiple environment variables are required, such as:
+
+    * Secret Key
+    * Database Username
+    * Database Password
+    * Database Host
+    * Email Credentials
+    * API Keys
+
+  For these projects, `python-decouple` is generally a better choice because it handles type conversion more conveniently.
+
+---
+
+### Generating `requirements.txt`
+
+To save all installed packages from your virtual environment, run:
+
+```bash
+pip freeze > requirements.txt
+```
+
+This command writes every installed package and its version into `requirements.txt`.
+
+This file allows other developers (or your future self) to install the same dependencies using:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+# Day 2
+
+## What is a Django App?
+
+A **Django App** is a reusable Python module that performs one specific task inside a Django project.
+
+Instead of putting all code into one place, Django encourages you to divide your project into multiple apps.
+
+### Example
+
+For an E-Commerce website:
+
+* `accounts` → User Registration & Login
+* `products` → Product Management
+* `orders` → Order Processing
+* `payments` → Payment System
+
+Each app is responsible for one feature, making the project organized and easier to maintain.
+
+---
+
+## Creating a Django App
+
+Create a new app using:
+
+```bash
+python manage.py startapp app_name
+```
+
+Example:
+
+```bash
+python manage.py startapp accounts
+```
+
+This command creates a new folder named `accounts` with all the files needed for a Django app.
+
+---
+
+## Registering the App
+
+After creating an app, you must register it in the project's `settings.py` file.
+
+```python
+INSTALLED_APPS = [
+    ...
+    "accounts",
+]
+```
+
+### Why is registration necessary?
+
+When an app is added to `INSTALLED_APPS`, Django recognizes it as part of the project.
+
+After registration, Django can:
+
+* Load the app.
+* Detect its models.
+* Create migrations.
+* Apply migrations to the database.
+* Register models in the admin panel.
+* Load templates, static files, and other app configurations.
+
+---
+
+## Django App Workflow
+
+```text
+Create App (startapp)
+        ↓
+Add app to INSTALLED_APPS
+        ↓
+Django recognizes the app
+        ↓
+Django detects the models
+        ↓
+Run makemigrations
+        ↓
+Run migrate
+        ↓
+Database tables are created
+```
+
+---
+
+## What is AbstractUser?
+
+Django already provides a default `User` model for authentication.
+
+Sometimes an application requires additional information about users, such as:
+
+* Phone Number
+* Profile Picture
+* Date of Birth
+* Address
+
+Instead of creating everything from scratch, Django provides `AbstractUser`.
+
+`AbstractUser` is a base class that contains all the fields and functionality of Django's default User model. By inheriting from it, you can easily add your own custom fields while keeping Django's authentication system.
+
+Example:
+
+```python
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+
+class CustomUser(AbstractUser):
+    phone = models.CharField(max_length=15)
+```
+
+This model includes all default user fields plus the new `phone` field.
+
+---
+
+## Types of Django Apps
+
+There are three categories of apps in Django.
+
+### 1. Built-in Apps
+
+These apps are provided by Django itself.
+
+Examples:
+
+* `django.contrib.admin`
+* `django.contrib.auth`
+* `django.contrib.sessions`
+
+These apps provide features like authentication, the admin panel, and session management.
+
+---
+
+### 2. Third-party Apps
+
+These apps are developed by other developers and installed using `pip`.
+
+Examples:
+
+* `djangorestframework`
+* `django-cors-headers`
+* `django-allauth`
+
+They add extra functionality to your project.
+
+---
+
+### 3. Local Apps
+
+These are apps that you create yourself using:
+
+```bash
+python manage.py startapp app_name
+```
+
+Examples:
+
+* `accounts`
+* `products`
+* `orders`
+
+These apps contain the business logic of your own project.
+
+---
+
+## Summary
+
+* **Project** → The complete Django application.
+* **App** → A single feature or module inside the project.
+* **Built-in Apps** → Created by Django.
+* **Third-party Apps** → Created by other developers.
+* **Local Apps** → Created by you.
+* **AbstractUser** → Allows you to extend Django's default User model with custom fields.
+* **python-decouple** → Securely loads environment variables with automatic type conversion.
+* **pip freeze > requirements.txt** → Saves all installed packages into a requirements file.
