@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from courses.models import Course, Semester
-
+from django.core.validators import FileExtensionValidator
 
 class Resource(models.Model):
     class ResourceType(models.TextChoices):
@@ -12,7 +12,10 @@ class Resource(models.Model):
         QUIZ = 'quiz', 'Quiz'
 
     title = models.CharField(max_length=200)
-    file = models.FileField(upload_to='resources/')
+    file = models.FileField(
+        upload_to='resources/',
+        validators=[FileExtensionValidator(allowed_extensions=['pdf', 'doc', 'docx', 'ppt', 'pptx'])]
+        )
     resource_type = models.CharField(
         max_length=20,
         choices=ResourceType.choices
