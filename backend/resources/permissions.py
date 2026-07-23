@@ -15,3 +15,4 @@ class IsAdminOrModerator(BasePermission):
             request.user.is_authenticated and
             request.user.role in ['admin', 'moderator']
         )
+    
