@@ -1,10 +1,9 @@
-from rest_framework import generics
 from .models import Resource
 from .serializers import ResourceSerializer
 from .permissions import IsAdminOrModerator
+from rest_framework import viewsets
 
-
-class ResourceListCreateView(generics.ListCreateAPIView):
+class ResourceViewSet(viewsets.ModelViewSet):
     queryset = Resource.objects.all()
     serializer_class = ResourceSerializer
     permission_classes = [IsAdminOrModerator]

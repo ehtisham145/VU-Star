@@ -1,6 +1,10 @@
-from django.urls import path
-from .views import ResourceListCreateView
+from django.urls import path,include
+from .views import ResourceViewSet
+from rest_framework.routers import DefaultRouter
+
+router=DefaultRouter()
+router.register('resource',ResourceViewSet,basename='resource')
 
 urlpatterns = [
-    path('resources/', ResourceListCreateView.as_view(), name='resource-list-create'),
+    path('', include(router.urls)),
 ]
