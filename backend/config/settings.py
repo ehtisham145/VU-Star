@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     # Rest Framework
     'rest_framework',
 
+    # Swagger UI
+    'drf_spectacular',
+
     #Local apps
     'users',
     'courses',
@@ -142,7 +145,14 @@ MEDIA_URL='/media/'
 MEDIA_ROOT=BASE_DIR /'media'
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES':(
-         'rest_framework_simplejwt.authentication.JWTAuthentication',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'VU Stars API',
+    'DESCRIPTION': 'API for VU Stars resource portal',
+    'VERSION': '1.0.0',
 }
